@@ -18,7 +18,7 @@
 
 **Purpose**: Modification-only feature — no new project initialization is required. One verification step to confirm the required CSS design token is available before writing any code.
 
-- [ ] T001 Confirm `--danger-color` is defined in both `:root` (light) and `[data-theme="dark"]` (dark) blocks in `packages/frontend/src/styles/theme.css`
+- [X] T001 Confirm `--danger-color` is defined in both `:root` (light) and `[data-theme="dark"]` (dark) blocks in `packages/frontend/src/styles/theme.css`
 
 ---
 
@@ -40,13 +40,13 @@
 
 > ⚠️ **Write these tests FIRST. Confirm they FAIL before writing any implementation code (Constitution Principle II — Test-First Development).**
 
-- [ ] T002 [US1] Add the following failing test cases to `packages/frontend/src/components/__tests__/TodoCard.test.js`: (1) past due date + incomplete → card has class `overdue` and text "Overdue" is in the document; (2) future due date + incomplete → no `overdue` class, no "Overdue" text; (3) today's date + incomplete → no `overdue` class, no "Overdue" text; (4) past due date + completed → no `overdue` class, no "Overdue" text; (5) null due date + incomplete → no `overdue` class, no "Overdue" text. Use a fixed `today` string (e.g., `"2026-03-19"`) passed directly to the component's internal helper to avoid Date mocking.
+- [X] T002 [US1] Add the following failing test cases to `packages/frontend/src/components/__tests__/TodoCard.test.js`: (1) past due date + incomplete → card has class `overdue` and text "Overdue" is in the document; (2) future due date + incomplete → no `overdue` class, no "Overdue" text; (3) today's date + incomplete → no `overdue` class, no "Overdue" text; (4) past due date + completed → no `overdue` class, no "Overdue" text; (5) null due date + incomplete → no `overdue` class, no "Overdue" text. Use a fixed `today` string (e.g., `"2026-03-19"`) passed directly to the component's internal helper to avoid Date mocking.
 
 ### Implementation for User Story 1
 
-- [ ] T003 [P] [US1] Add `getTodayLocalDateString()` (builds `YYYY-MM-DD` from `new Date()` local year/month/date components) and `isOverdue(todo, today = getTodayLocalDateString())` (returns `true` only when `todo.dueDate` is set, `todo.dueDate < today`, and `todo.completed` is falsy) as module-level helper functions before the `TodoCard` function declaration in `packages/frontend/src/components/TodoCard.js`
-- [ ] T004 [P] [US1] Append the following two CSS rules to `packages/frontend/src/App.css`: `.todo-card.overdue { border-left: 4px solid var(--danger-color); }` and `.overdue-badge { color: var(--danger-color); font-weight: 600; font-size: 12px; }`
-- [ ] T005 [US1] Update the card root `<div>` in the non-editing return of `packages/frontend/src/components/TodoCard.js` to append `" overdue"` to the className when `isOverdue(todo)` is true (pattern mirrors the existing `" completed"` modifier), and add `{isOverdue(todo) && <span className="overdue-badge"> · Overdue</span>}` inside the `<p className="todo-due-date">` element, after `{formatDate(todo.dueDate)}` (depends on T003)
+- [X] T003 [P] [US1] Add `getTodayLocalDateString()` (builds `YYYY-MM-DD` from `new Date()` local year/month/date components) and `isOverdue(todo, today = getTodayLocalDateString())` (returns `true` only when `todo.dueDate` is set, `todo.dueDate < today`, and `todo.completed` is falsy) as module-level helper functions before the `TodoCard` function declaration in `packages/frontend/src/components/TodoCard.js`
+- [X] T004 [P] [US1] Append the following two CSS rules to `packages/frontend/src/App.css`: `.todo-card.overdue { border-left: 4px solid var(--danger-color); }` and `.overdue-badge { color: var(--danger-color); font-weight: 600; font-size: 12px; }`
+- [X] T005 [US1] Update the card root `<div>` in the non-editing return of `packages/frontend/src/components/TodoCard.js` to append `" overdue"` to the className when `isOverdue(todo)` is true (pattern mirrors the existing `" completed"` modifier), and add `{isOverdue(todo) && <span className="overdue-badge"> · Overdue</span>}` inside the `<p className="todo-due-date">` element, after `{formatDate(todo.dueDate)}` (depends on T003)
 
 **Checkpoint**: Run `cd packages/frontend && npm test -- --testPathPattern=TodoCard`. All five US1 test cases must pass. The overdue visual indicator is now fully functional for static rendering.
 
@@ -62,7 +62,7 @@
 
 > ⚠️ **Write these tests BEFORE verifying implementation. If Phase 3 is not yet complete, confirm these fail first.**
 
-- [ ] T006 [US2] Add the following test cases to `packages/frontend/src/components/__tests__/TodoCard.test.js`: (1) overdue todo re-rendered with a future due date → `overdue` class and "Overdue" text are removed; (2) non-overdue todo re-rendered with a past due date → `overdue` class and "Overdue" text appear. Use `rerender` from `@testing-library/react` to simulate a prop change without a page reload.
+- [X] T006 [US2] Add the following test cases to `packages/frontend/src/components/__tests__/TodoCard.test.js`: (1) overdue todo re-rendered with a future due date → `overdue` class and "Overdue" text are removed; (2) non-overdue todo re-rendered with a past due date → `overdue` class and "Overdue" text appear. Use `rerender` from `@testing-library/react` to simulate a prop change without a page reload.
 
 ### Implementation Notes for User Story 2
 
@@ -82,7 +82,7 @@
 
 > ⚠️ **Write these tests BEFORE verifying implementation. If Phase 3 is not yet complete, confirm these fail first.**
 
-- [ ] T007 [US3] Add the following test cases to `packages/frontend/src/components/__tests__/TodoCard.test.js`: (1) overdue todo (`completed: 0`) re-rendered with `completed: 1` → `overdue` class and "Overdue" text are removed; (2) the same todo re-rendered back to `completed: 0` → `overdue` class and "Overdue" text reappear. Use `rerender` from `@testing-library/react`.
+- [X] T007 [US3] Add the following test cases to `packages/frontend/src/components/__tests__/TodoCard.test.js`: (1) overdue todo (`completed: 0`) re-rendered with `completed: 1` → `overdue` class and "Overdue" text are removed; (2) the same todo re-rendered back to `completed: 0` → `overdue` class and "Overdue" text reappear. Use `rerender` from `@testing-library/react`.
 
 ### Implementation Notes for User Story 3
 
@@ -96,8 +96,8 @@
 
 **Purpose**: Final coverage gate and manual quickstart validation across all user stories.
 
-- [ ] T008 [P] Run the full frontend test suite with coverage and confirm the ≥80% coverage threshold passes: `cd packages/frontend && npm test -- --coverage`
-- [ ] T009 Run the quickstart.md manual verification steps against `http://localhost:3000`: create a todo with a past due date (incomplete) → verify red left border and inline "Overdue" badge; create a todo with a future due date → verify no indicator; toggle dark mode → verify Danger color updates on both border and badge; mark the overdue todo complete → verify indicator disappears immediately; unmark it → verify indicator reappears
+- [X] T008 [P] Run the full frontend test suite with coverage and confirm the ≥80% coverage threshold passes: `cd packages/frontend && npm test -- --coverage`
+- [X] T009 Run the quickstart.md manual verification steps against `http://localhost:3000`: create a todo with a past due date (incomplete) → verify red left border and inline "Overdue" badge; create a todo with a future due date → verify no indicator; toggle dark mode → verify Danger color updates on both border and badge; mark the overdue todo complete → verify indicator disappears immediately; unmark it → verify indicator reappears
 
 ---
 
