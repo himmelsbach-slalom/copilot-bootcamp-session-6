@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
 
+function getTodayLocalDateString() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function isOverdue(todo, today = getTodayLocalDateString()) {
+  return Boolean(todo.dueDate && todo.dueDate < today && !todo.completed);
+}
+
 function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
@@ -107,7 +116,7 @@ function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
   }
 
   return (
-    <div className={`todo-card ${todo.completed ? 'completed' : ''}`}>
+    <div className={`todo-card${todo.completed ? ' completed' : ''}${isOverdue(todo) ? ' overdue' : ''}`}>
       <input
         type="checkbox"
         checked={todo.completed === 1}
@@ -121,7 +130,7 @@ function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
         <h3 className="todo-title">{todo.title}</h3>
         {todo.dueDate && (
           <p className="todo-due-date">
-            Due: {formatDate(todo.dueDate)}
+            Due: {formatDate(todo.dueDate)}{isOverdue(todo) && <span className="overdue-badge"> · Overdue</span>}
           </p>
         )}
       </div>

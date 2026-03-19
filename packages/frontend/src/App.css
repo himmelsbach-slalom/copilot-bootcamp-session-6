@@ -574,3 +574,14 @@ a:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+/* Overdue Todo Indicator */
+.todo-card.overdue {
+  border-left: 4px solid var(--danger-color);
+}
+
+.overdue-badge {
+  color: var(--danger-color);
+  font-weight: 600;
+  font-size: 12px;
+}
