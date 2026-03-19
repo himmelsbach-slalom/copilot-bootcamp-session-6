@@ -1,50 +1,139 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+SYNC IMPACT REPORT
+==================
+Version change: (none) → 1.0.0
+Modified principles: N/A — initial ratification from docs/ guidelines
+Added sections:
+  - Core Principles (5 principles derived from docs/)
+  - Technical Stack & Constraints
+  - Development Workflow
+Removed sections: N/A
+Templates reviewed:
+  - .specify/templates/plan-template.md ✅ aligned (Constitution Check gate present)
+  - .specify/templates/spec-template.md ✅ aligned (FR/user story structure compatible)
+  - .specify/templates/tasks-template.md ✅ aligned (test-first task ordering matches Principle II)
+Follow-up TODOs: None — all placeholders resolved.
+-->
+
+# Copilot Bootcamp Todo App Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Clean Code & Consistency (NON-NEGOTIABLE)
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+All code MUST follow the project's established conventions without exception:
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+- **Indentation**: 2 spaces for all file types (JS, JSON, CSS, Markdown).
+- **Naming**: `camelCase` for variables/functions; `PascalCase` for React components and
+  classes; `UPPER_SNAKE_CASE` for constants. File names MUST match their exported component name.
+- **Line length**: MUST stay under 100 characters for code.
+- **Imports**: MUST be ordered — external libraries → internal modules → styles —
+  with a blank line separating each group. No circular dependencies.
+- **Linting**: All code MUST pass ESLint before merge. Auto-fixable warnings MUST be fixed;
+  suppressions require explicit justification in a comment.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+> **Rationale**: Consistent style reduces cognitive load during code review and prevents
+> entire classes of bugs (e.g., shadowed variables, missing exports).
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### II. Test-First Development (NON-NEGOTIABLE)
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Tests MUST be written before (or alongside) implementation — never after:
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- Tests MUST describe expected behavior before code is written (Red → Green → Refactor).
+- Unit and integration tests are REQUIRED; end-to-end tests are out of scope for now.
+- **Coverage target**: 80%+ across all packages, tracked via Jest coverage reports.
+- Tests MUST be isolated: each test sets up its own data, cleans up after itself, and
+  mocks all external dependencies (API calls, timers, etc.).
+- Test names MUST describe behavior in plain language (e.g., `"should mark todo as complete
+  when checkbox is clicked"`).
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+> **Rationale**: Untested code is unmaintainable code. The 80% floor prevents coverage
+> theater while ensuring critical paths are protected.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### III. Single Responsibility & Minimal Scope
+
+Every module, component, and function MUST have exactly one well-defined responsibility:
+
+- No feature creep: implement only what is specified in the functional requirements.
+- YAGNI (You Aren't Gonna Need It) applies — do not build for hypothetical future needs.
+- Out-of-scope features (authentication, multi-user, filtering, search, bulk operations,
+  recurring todos, mobile optimization) MUST NOT be introduced without an explicit
+  constitution amendment.
+- Components MUST NOT own logic that belongs to a service layer, and vice versa.
+
+> **Rationale**: Scope discipline keeps the codebase small, understandable, and aligned
+> with the bootcamp's teaching goals.
+
+### IV. UI Consistency & Design System Adherence
+
+All UI work MUST conform to the established design system defined in `docs/ui-guidelines.md`:
+
+- **Spacing**: 8px grid system MUST be used for all margins, paddings, and gaps.
+- **Color**: Only palette tokens defined in the design system (light and dark mode variants)
+  MUST be used — no ad-hoc hex values.
+- **Typography**: Font sizes and weights MUST stay within the defined scale
+  (28px heading → 12px caption).
+- **Theme**: Both light and dark modes MUST be supported; new components MUST handle both.
+- **Layout**: Single-column layout with a 600px max-width constraint MUST be maintained.
+
+> **Rationale**: Visual consistency makes the app appear intentional and professional,
+> and reduces design decision fatigue during development.
+
+### V. Full-Stack Simplicity
+
+The architecture MUST remain as simple as possible for the defined scope:
+
+- Frontend: React only. No state management libraries (Redux, Zustand, etc.) unless
+  explicitly approved.
+- Backend: Express.js only. No ORM, no additional frameworks.
+- Monorepo: npm workspaces structure MUST be maintained — do not restructure the repo.
+- All todo changes MUST persist to the backend immediately (no local-only state as
+  a permanent solution).
+- No database schema changes beyond basic todo storage are permitted.
+
+> **Rationale**: Simplicity ensures the project remains a useful teaching artifact and
+> does not introduce incidental complexity that distracts from the bootcamp objectives.
+
+## Technical Stack & Constraints
+
+| Layer | Technology | Notes |
+|-------|-----------|-------|
+| Frontend | React (with React DOM) | CSS for styling; no CSS-in-JS |
+| Backend | Node.js + Express.js | REST API |
+| Testing | Jest + @testing-library/react | Both packages |
+| Monorepo | npm workspaces | Root `npm run start` / `npm test` |
+| Min Node.js | v16 | Min npm v7 |
+
+**Constraints**:
+
+- Single-user application — no authentication or user isolation required.
+- Desktop-focused UI — no mobile-specific optimisation required.
+- All API state changes MUST be reflected in the UI after persistence (optimistic updates
+  are permitted but MUST be reconciled with the server response).
+
+## Development Workflow
+
+- All feature work MUST occur on a dedicated branch (e.g., `feature/<description>`).
+- A branch MUST be pushed with upstream set (`git push -u origin <branch>`) before
+  opening a pull request.
+- Every PR MUST include passing tests and lint checks before merge.
+- Constitution compliance MUST be verified in the plan's "Constitution Check" gate before
+  implementation begins.
+- Any complexity that deviates from the principles MUST be documented in the plan's
+  "Complexity Tracking" table with a justification.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other practices and documentation in the event of a conflict.
+Amendments require:
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+1. An explicit rationale explaining why the change is necessary.
+2. A version bump following semantic versioning rules (MAJOR for breaking/removal,
+   MINOR for additions, PATCH for clarifications).
+3. Updates to all dependent templates (`.specify/templates/`) to remain consistent.
+4. Entry in the next Sync Impact Report.
+
+All pull requests MUST verify compliance with the active version of this constitution.
+Complexity MUST be justified — if it cannot be, it MUST be removed.
+
+**Version**: 1.0.0 | **Ratified**: 2026-03-19 | **Last Amended**: 2026-03-19
